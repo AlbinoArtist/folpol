@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="folpol">
+
+<head>
+    <meta charset="utf-8">
+    <base href="/">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FolPol</title>
+
+    <!-- CSS -->
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+    <script src="node_modules/angular-route/angular-route.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body ng-controller="navController">
+    <div class= "bg" ng-class="bgClass()">
+    <!-- Navigation Bar -->
+    <div>
+        <nav class="container" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar" id="{icon-bar-black:isNavCollapsed}"></span>
+                    <span class="icon-bar" id="{icon-bar-black:isNavCollapsed}"></span>
+                    <span class="icon-bar" id="{icon-bar-black:isNavCollapsed}"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="" ng-class="{active:isActive('/')}" ng-click="closeNav()">
+                        <a href="/">
+                            Home
+                        </a>
+                    </li>
+                   
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <!-- View -->
+    <main data-ng-view></main>
+    </div>
+</body>
+
+</html>

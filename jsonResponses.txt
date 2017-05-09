@@ -1,0 +1,37 @@
+Person - If NOT filtered on ID then person element, otherwise not:
+"person": [
+    {
+    "hangar_guid": "abae3465-b872-42c4-9b51-2ab53422ed78",
+    "sourceid": "31ae8846-ad0b-4ff2-aaf7-72b398d1fb5a",
+    "intressent_id": "069309987221",
+    "hangar_id": "2369328",
+    "fodd_ar": "1985",
+    "kon": "man",
+    "efternamn": "Hultberg",
+    "tilltalsnamn": "Johan",
+    "sorteringsnamn": "Hultberg,Johan",
+    "iort": null,
+    "parti": "M",
+    "valkrets": "Kronobergs län",
+    "status": "Tjänstgörande riksdagsledamot",
+    "person_url_xml": "http://data.riksdagen.se/person/31ae8846-ad0b-4ff2-aaf7-72b398d1fb5a",
+    "bild_url_80": "http://data.riksdagen.se/filarkiv/bilder/ledamot/31ae8846-ad0b-4ff2-aaf7-72b398d1fb5a_80.jpg",
+    "bild_url_192": "http://data.riksdagen.se/filarkiv/bilder/ledamot/31ae8846-ad0b-4ff2-aaf7-72b398d1fb5a_192.jpg",
+    "bild_url_max": "http://data.riksdagen.se/filarkiv/bilder/ledamot/31ae8846-ad0b-4ff2-aaf7-72b398d1fb5a_max.jpg",
+    "personuppdrag": {
+        "uppdrag": [
+        {
+            "organ_kod": "kam",
+            "roll_kod": "Riksdagsledamot",
+            "ordningsnummer": "254",
+            "status": "Tjänstgörande",
+            "typ": "kammaruppdrag",
+            "from": "2017-02-27",
+            "tom": "2018-09-24",
+            "uppgift": null,
+            "intressent_id": "069309987221",
+            "hangar_id": "2369328",
+            "sortering": "10",
+            "organ_sortering": "10",
+            "uppdrag_rollsortering": "60",
+            "uppdrag_statussortering": "10"

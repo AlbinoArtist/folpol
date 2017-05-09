@@ -3,20 +3,6 @@ app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when("/", {
             templateUrl: "views/view-home.html",
-            controller: "navController"
-        })
-        .when("/resume", {
-            templateUrl: "views/view-home.html",
-            controller: "navController",
-
-        })
-        .when("/portfolio", {
-            templateUrl: "views/view-home.html",
-            controller: "navController"
-        })
-        .when("/contact", {
-            templateUrl: "views/view-home.html",
-            controller: "navController"
         })
         .otherwise({
             redirectTo: "/"
@@ -25,52 +11,83 @@ app.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 });
 
-app.controller("navController", ["$scope", "$location", "$http",
-    function ($scope, $location, $http) {
+app.controller("navController", ["$scope", "$location", "$http", "PoliticianFactory",
+    function ($scope, $location, $http, PoliticianFactory) {
+
+        PoliticianFactory.getAllPoliticians().then(function (data) {
+            $scope.allPoliticians = data;
+        });
+
+        $scope.updatePolitician = function (intressent_id) {
+            PoliticianFactory.getPolitician(intressent_id, '5').then(function (data) {
+                $scope.docData = data;
+            });
+            PoliticianFactory.fetchPoliticianStats(intressent_id).then(function (data) {
+                console.log(intressent_id);
+                $scope.selectedPoliticianStats = data;
+            });
+
+        };
+
+    }
+]);
+
+app.factory("PoliticianFactory", function ($http, $q) {
+
+    //Returns all active politicians and their roles.
+
+    function getAllPoliticians() {
+        var deferred = $q.defer();
         var iid = '';
         var namn = '';
         var requestString = 'http://data.riksdagen.se/personlista/?iid=' + iid + '&fnamn=' + namn + '&enamn=&f_ar=&kn=&parti=&valkrets=&rdlstatus=&org=&utformat=json&termlista=';
-        console.log("calling the first log");
         $http.get(requestString)
             .then(function (response) {
-                $scope.allPoliticians = response.data.personlista.person;
+                console.log("Reaches 2");
+                deferred.resolve(response.data.personlista.person);
             });
+        return deferred.promise;
 
+    };
 
-        $scope.fetchStats = function () {
-            console.log("triggered")
-            $http.get('http://data.riksdagen.se/voteringlista/?bet=&punkt=&valkrets=&rost=&iid=' + $scope.selectedPolitician.intressent_id + '&sz=5&utformat=json&gruppering=iid')
-                .then(function (response) {
-                     //Haft of the output is unusable since Riksdagen return json in with åäö characters. Needs a solid fix.
-                    $scope.selectedPoliticianStats = response.data.voteringlista.votering;
-                   
-                    
-                    
-                });
+    //Returns all votes made by a specific politician.
+    function getPolitician(intressent_id, size) {
+        var deferred = $q.defer();
+        $http.get(' http://data.riksdagen.se/voteringlista/?bet=&punkt=&valkrets=&rost=&iid=' + intressent_id + '&sz=' + size + '&utformat=json&gruppering=')
+            .then(function (response) {
+                var politician = response.data.voteringlista.votering;
+                for (i = 0; i < size; i++) {
+                    getDocument(politician[i]);
+                }
+                deferred.resolve(politician);
+            });
+        return deferred.promise;
+    };
 
-        };
-        $scope.fetchPolitician = function () {
-            console.log("calling http with politicianid:" + $scope.selectedPolitician.intressent_id);
-            var size = 10;
-            $http.get(' http://data.riksdagen.se/voteringlista/?bet=&punkt=&valkrets=&rost=&iid=' + $scope.selectedPolitician.intressent_id + '&sz=' + size + '&utformat=json&gruppering=')
-                .then(function (response) {
-                    var tempdata = response.data.voteringlista.votering;
-                    for (i = 0; i < size; i++) {
-                        getDocument(tempdata[i]);
-                    }
-                    $scope.docData = tempdata;
+    //Helper function to get the proper names of bills that the politician voted for. Loops the votes for now as the data is not accessable in a better way.
+    function getDocument(documentId) {
+        $http.get('http://data.riksdagen.se/dokumentlista/?sok=&doktyp=&rm=&from=&tom=&ts=&bet=' + documentId.beteckning + '&tempbet=&nr=&org=&iid=&webbtv=&talare=&exakt=&planering=&sort=rel&sortorder=desc&rapport=&utformat=json&a=s#soktraff')
+            .then(function (response) {
+                documentId.titel = response.data.dokumentlista.dokument[0].titel;
+            });
+    };
 
-                });
+    //Returns aggregated information about a specific politician.
+    function fetchPoliticianStats(intressent_id) {
+        var deferred = $q.defer();
+        $http.get('http://data.riksdagen.se/voteringlista/?bet=&punkt=&valkrets=&rost=&iid=' + intressent_id + '&sz=5&utformat=json&gruppering=iid')
+            .then(function (response) {
+                //The fields  Frånvarande and Avstår is unusable since Riksdagen return json in with åäö characters. Needs a solid fix.
+                deferred.resolve(response.data.voteringlista.votering);
+            });
+            return deferred.promise;
 
-            var getDocument = function (documentId) {
-                $http.get('http://data.riksdagen.se/dokumentlista/?sok=&doktyp=&rm=&from=&tom=&ts=&bet=' + documentId.beteckning + '&tempbet=&nr=&org=&iid=&webbtv=&talare=&exakt=&planering=&sort=rel&sortorder=desc&rapport=&utformat=json&a=s#soktraff')
-                    .then(function (response) {
-                        documentId.titel = response.data.dokumentlista.dokument[0].titel;
-                    });
-            }
-            $scope.fetchStats();
-             
+    };
 
-        }
-    }
-]);
+    return {
+        getAllPoliticians: getAllPoliticians,
+        getPolitician: getPolitician,
+        fetchPoliticianStats: fetchPoliticianStats
+    };
+
+});

@@ -1,38 +1,57 @@
+<div class="constainer-fluid topbar">
+    <div class="row">
+        <div class="col-lg-12"> <h1 class="text-center">Politician summary</h1>
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            <h1>Folpol</h1>
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <select class="form-control" ng-model="selectedPolitician" ng-options="x.sorteringsnamn for x in allPoliticians | orderBy: 'sorteringsnamn'" ng-change="updatePolitician(selectedPolitician.intressent_id)">
+            <select class="form-control" ng-model="selectedPolitician" ng-options="x.sorteringsnamn for x in allPoliticians | orderBy: 'sorteringsnamn'"
+                ng-change="updatePolitician(selectedPolitician.intressent_id)">
             <option value="">- Choose a politician -</option>
            </select>
             <div class="row">
-                <div class="col-sm-8">
-                    <h1>You chose: <br>{{selectedPolitician.sorteringsnamn}}<br> {{selectedPolitician.intressent_id}}</h1>
+                <div class="col-sm-3">
+                    <img ng-src="{{selectedPolitician.bild_url_192}}">
                 </div>
+                
                 <div class="col-sm-4">
-                    <img src="{{selectedPolitician.bild_url_80}}">
+                    <div data-ng-bind="selectedPolitician.sorteringsnamn"></div>
+                    <div data-ng-bind="selectedPolitician.intressent_id"></div>
+                    <div data-ng-bind="selectedPolitician.parti"></div>
+                    <div data-ng-bind="selectedPolitician.valkrets"></div>
+                    <div data-ng-bind="selectedPolitician.intressent_id"></div>
+
+                </div>
+                 <div class="col-sm-4">
+                    <div ng-repeat="uppgift in selectedPolitician.personuppgift.uppgift.kod">
+                        <div>{{uppgift.kod}}</div>
+                    </div>
+
+               
+
+                </div>
+
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Datum</th>
+                            <th>Fråga</th>
+                            <th>Svar</th>
+                            <th>Titel</th>
+                        </tr>
+                        <tr ng-repeat="y in docData">
+                            <td>{{y.systemdatum}}</td>
+                            <td>{{y.beteckning}}</td>
+                            <td>{{y.rost}}</td>
+                            <td>{{y.titel}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-
-            <table class="table table-bordered">
-                <tr>
-                    <th>Datum</th>
-                    <th>Fråga</th>
-                    <th>Svar</th>
-                    <th>Titel</th>
-                </tr>
-                <tr ng-repeat="y in docData">
-                    <td>{{y.systemdatum}}</td>
-                    <td>{{y.beteckning}}</td>
-                    <td>{{y.rost}}</td>
-                    <td>{{y.titel}}</td>
-                </tr>
-            </table>
             <table class="table table-bordered">
                 <tr>
                     <th>Ja</th>

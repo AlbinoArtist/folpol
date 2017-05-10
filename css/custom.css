@@ -1,0 +1,12 @@
+.topbar{
+    background-image: url("/images/writing.jpeg");
+    height: 20vh;
+     background-color: #cccccc;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+     background-size: cover;    
+     padding-top: 5vh;
+
+
+}

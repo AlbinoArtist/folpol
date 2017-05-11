@@ -35,3 +35,6 @@ Person - If NOT filtered on ID then person element, otherwise not:
             "organ_sortering": "10",
             "uppdrag_rollsortering": "60",
             "uppdrag_statussortering": "10"
+    "personuppgifter": {
+        
+    }
